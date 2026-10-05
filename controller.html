@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <title>Sidi El Majhoul Controller</title>
+    <style>
+      :root { color-scheme: dark; font-family: system-ui, sans-serif; }
+      * { box-sizing: border-box; }
+      body { margin: 0; min-height: 100vh; background: #16111a; color: #fff; display: grid; place-items: center; touch-action: none; user-select: none; }
+      main { width: min(100%, 760px); min-height: 100vh; padding: 18px; display: grid; grid-template-rows: auto 1fr auto; gap: 18px; }
+      header { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+      h1 { margin: 0; color: #ffd166; font-size: clamp(18px, 5vw, 28px); letter-spacing: 0; }
+      #status { font-size: 13px; color: #ff8585; }
+      #status.connected { color: #78e08f; }
+      .controls { display: flex; align-items: end; justify-content: space-between; gap: 20px; padding: 12px 0; }
+      .cluster { display: flex; gap: 12px; align-items: center; }
+      button { border: 2px solid #e8d7bd; color: #fff; background: #332838; min-width: 74px; min-height: 74px; border-radius: 50%; font: inherit; font-weight: 700; -webkit-tap-highlight-color: transparent; box-shadow: 0 5px 0 #0d0a10; }
+      button:active, button.pressed { transform: translateY(4px); box-shadow: 0 1px 0 #0d0a10; background: #665069; }
+      .action { min-width: 90px; min-height: 90px; background: #8c3040; border-color: #ff9c8f; }
+      .jump { background: #9a741d; border-color: #ffe29a; }
+      footer { text-align: center; color: #c7b9c9; font-size: 12px; }
+      @media (orientation: portrait) { main { min-height: auto; } .controls { min-height: 58vh; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header><h1>SIDI EL MAJHOUL</h1><span id="status">Connecting...</span></header>
+      <section class="controls" aria-label="Controls">
+        <div class="cluster"><button data-key="ArrowLeft" aria-label="Left">◀</button><button data-key="ArrowRight" aria-label="Right">▶</button></div>
+        <div class="cluster"><button class="jump" data-key="Space">JUMP</button><button class="action" data-key="KeyX">ATK</button><button data-key="KeyE">TALK</button></div>
+      </section>
+      <footer>Open this page on a phone connected to the same Wi-Fi as the computer.</footer>
+    </main>
+    <script>
+      const status = document.querySelector('#status');
+      let socket;
+      const pressed = new Set();
+      function connect() {
+        socket = new WebSocket(`${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/ws`);
+        socket.addEventListener('open', () => { status.textContent = 'Waiting for game...'; socket.send(JSON.stringify({ type: 'register', role: 'controller' })); });
+        socket.addEventListener('message', (event) => { const message = JSON.parse(event.data); if (message.type === 'game-status') { status.textContent = message.connected ? 'Game connected' : 'Waiting for game...'; status.classList.toggle('connected', message.connected); } });
+        socket.addEventListener('close', () => { status.textContent = 'Disconnected'; status.classList.remove('connected'); setTimeout(connect, 1500); });
+      }
+      function send(key, isDown) {
+        if (!socket || socket.readyState !== WebSocket.OPEN) return;
+        socket.send(JSON.stringify({ type: 'input', key, isDown }));
+      }
+      document.querySelectorAll('button[data-key]').forEach((button) => {
+        const key = button.dataset.key;
+        const down = (event) => { event.preventDefault(); if (pressed.has(key)) return; pressed.add(key); button.classList.add('pressed'); send(key, true); };
+        const up = (event) => { event.preventDefault(); if (!pressed.has(key)) return; pressed.delete(key); button.classList.remove('pressed'); send(key, false); };
+        button.addEventListener('pointerdown', down); button.addEventListener('pointerup', up); button.addEventListener('pointercancel', up); button.addEventListener('pointerleave', up);
+      });
+      window.addEventListener('blur', () => { pressed.forEach((key) => send(key, false)); pressed.clear(); document.querySelectorAll('button').forEach((button) => button.classList.remove('pressed')); });
+      connect();
+    </script>
+  </body>
+</html>
