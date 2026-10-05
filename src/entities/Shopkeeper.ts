@@ -15,7 +15,7 @@ export class Shopkeeper extends Entity {
             const texture = await Assets.load('assets/deco/WhatsApp_Image_2026-09-30_at_13.36.41-removebg-preview.png');
             this.sprite = new Sprite(texture);
             this.sprite.anchor.set(0.5, 1);
-            this.sprite.scale.set(0.35);
+            this.sprite.scale.set(0.28);
             this.sprite.y = 8;
             this.addChild(this.sprite);
             this.isLoaded = true;

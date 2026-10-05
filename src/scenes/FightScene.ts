@@ -41,6 +41,7 @@ export class FightScene extends BaseScene {
     private playerCombo = 0;
     private lastPlayerHitAt = 0;
     private levelChangeStarted = false;
+    private hasSword = false;
     // private colorFilter: ColorMatrixFilter;
 
     constructor() {
@@ -64,6 +65,7 @@ export class FightScene extends BaseScene {
         this.dialogueBox = new DialogueBox(() => {
             this.isPaused = false;
         }, () => {
+            this.hasSword = true;
             this.player.hasSword = true;
         });
         this.uiContainer.addChild(this.dialogueBox);
@@ -212,9 +214,8 @@ export class FightScene extends BaseScene {
         ground.fill({ color: 0x000000, alpha: 0 });
         this.worldContainer.addChild(ground);
 
-        const hasSword = this.player?.hasSword ?? false;
         this.player = new Player();
-        this.player.hasSword = hasSword;
+        this.player.hasSword = this.hasSword;
         this.player.x = 200;
         this.player.y = groundY;
         this.player.groundY = groundY;

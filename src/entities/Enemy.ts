@@ -203,9 +203,9 @@ export class Enemy extends Entity {
 export class Chamharouch extends Enemy {
     constructor(target: Player) {
         super(target);
-        this.health = 140;
-        this.attackDamage = 18;
-        this.attackCooldown = 1400;
+        this.health = 125;
+        this.attackDamage = 16;
+        this.attackCooldown = 1550;
         this.loadAnimations('chamharouch', {
             idle: 1,
             walk: 3,
