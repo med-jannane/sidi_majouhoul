@@ -15,13 +15,13 @@ const QUESTIONS = [
     },
     {
         text: 'What is the traditional Moroccan market called?',
-        choices: ['A souk', 'A dojo', 'A station'],
-        correct: 0
+        choices: ['A dojo', 'A souk', 'A station'],
+        correct: 1
     },
     {
         text: 'Which instrument carries the Gnawa spirit in this journey?',
-        choices: ['The guembri', 'The piano', 'The violin'],
-        correct: 0
+        choices: ['The piano', 'The violin', 'The guembri'],
+        correct: 2
     }
 ];
 
@@ -36,6 +36,7 @@ export class DialogueBox extends Container {
     private showingQuestions = false;
     private active = false;
     private voicePlaying = false;
+    private dialogueTimer: ReturnType<typeof setTimeout> | null = null;
     private onClose: () => void;
     private onSwordEarned: () => void;
 
@@ -85,6 +86,7 @@ export class DialogueBox extends Container {
         this.showingQuestions = false;
         this.visible = true;
         this.showCurrentLine();
+        this.scheduleNextLine(6500);
         AudioManager.pause('marrakech_bgm');
         AudioManager.stop('elder_dialogue');
         this.voicePlaying = true;
@@ -94,12 +96,14 @@ export class DialogueBox extends Container {
     public advance() {
         if (!this.active) return;
         if (this.showingQuestions) return;
+        this.clearDialogueTimer();
         if (this.currentLine >= STORY_LINES.length - 1) {
             if (!this.showingQuestions) this.close();
             return;
         }
         this.currentLine += 1;
         this.showCurrentLine();
+        this.scheduleNextLine(5500);
     }
 
     public answerQuestion(choice: number) {
@@ -125,6 +129,7 @@ export class DialogueBox extends Container {
 
     public close() {
         if (!this.active) return;
+        this.clearDialogueTimer();
         this.active = false;
         this.visible = false;
         AudioManager.stop('elder_dialogue');
@@ -146,6 +151,18 @@ export class DialogueBox extends Container {
             this.hint.text = 'E / TALK to answer';
             this.showingQuestions = true;
             this.showQuestion('Answer the elder to earn your sword.');
+        }
+    }
+
+    private scheduleNextLine(delay: number) {
+        this.clearDialogueTimer();
+        this.dialogueTimer = setTimeout(() => this.advance(), delay);
+    }
+
+    private clearDialogueTimer() {
+        if (this.dialogueTimer !== null) {
+            clearTimeout(this.dialogueTimer);
+            this.dialogueTimer = null;
         }
     }
 
