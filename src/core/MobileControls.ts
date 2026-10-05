@@ -13,10 +13,14 @@ export class MobileControls extends Container {
             this.visible = false;
         }
 
-        this.createDirButton('ArrowLeft', 100, 600, '◀');
-        this.createDirButton('ArrowRight', 250, 600, '▶');
-        this.createActionButton('Space', 1030, 600, 'JUMP', 0xFFD700);
-        this.createActionButton('KeyX', 1180, 600, 'ATK', 0xFF0000);
+        this.createDirButton('ArrowUp', 150, 510, '▲');
+        this.createDirButton('ArrowLeft', 75, 590, '◀');
+        this.createDirButton('ArrowDown', 150, 670, '▼');
+        this.createDirButton('ArrowRight', 225, 590, '▶');
+        this.createActionButton('Space', 1030, 555, 'A', 0xFFD700);
+        this.createActionButton('KeyE', 1150, 555, 'B', 0x4DA3FF);
+        this.createActionButton('KeyX', 1030, 665, 'X', 0xFF0000);
+        this.createActionButton('KeyY', 1150, 665, 'Y', 0x55C878);
     }
 
     public setInput(key: string, isDown: boolean) {

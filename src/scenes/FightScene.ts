@@ -160,6 +160,14 @@ export class FightScene extends BaseScene {
         // Ajout des contrôles mobiles
         this.mobileControls = new MobileControls((key, isDown) => {
             if (this.player) {
+                if (isDown && (key === 'KeyE' || key === 'KeyY')) {
+                    this.handleDialogueInput();
+                    return;
+                }
+                if (isDown && this.gambriChallenge.visible && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(key)) {
+                    this.gambriChallenge.handleInput(key);
+                    return;
+                }
                 this.player.keys[key] = isDown;
                 if (key === 'KeyX' && isDown) {
                     this.player.requestAttack();
