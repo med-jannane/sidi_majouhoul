@@ -13,14 +13,14 @@ export class MobileControls extends Container {
             this.visible = false;
         }
 
-        this.createDirButton('ArrowUp', 150, 510, '▲');
-        this.createDirButton('ArrowLeft', 75, 590, '◀');
-        this.createDirButton('ArrowDown', 150, 670, '▼');
-        this.createDirButton('ArrowRight', 225, 590, '▶');
-        this.createActionButton('Space', 1030, 555, 'A', 0xFFD700);
-        this.createActionButton('KeyE', 1150, 555, 'B', 0x4DA3FF);
-        this.createActionButton('KeyX', 1030, 665, 'X', 0xFF0000);
-        this.createActionButton('KeyY', 1150, 665, 'Y', 0x55C878);
+        this.createDirButton('ArrowUp', 120, 510, '▲');
+        this.createDirButton('ArrowLeft', 55, 575, '◀');
+        this.createDirButton('ArrowDown', 120, 640, '▼');
+        this.createDirButton('ArrowRight', 185, 575, '▶');
+        this.createActionButton('KeyY', 1100, 510, 'Y', 0x55C878);
+        this.createActionButton('KeyX', 1030, 590, 'X', 0xFF0000);
+        this.createActionButton('KeyE', 1170, 590, 'B', 0x4DA3FF);
+        this.createActionButton('Space', 1100, 670, 'A', 0xFFD700);
     }
 
     public setInput(key: string, isDown: boolean) {
@@ -29,13 +29,13 @@ export class MobileControls extends Container {
 
     private createDirButton(key: string, x: number, y: number, label: string) {
         const btn = new Graphics();
-        btn.circle(0, 0, 50);
+        btn.circle(0, 0, 34);
         btn.fill({ color: 0xFFFFFF, alpha: 0.2 });
         btn.stroke({ color: 0xFFFFFF, width: 2 });
         
         const txt = new Text({ 
             text: label, 
-            style: { fill: 0xFFFFFF, fontSize: 40 } 
+            style: { fill: 0xFFFFFF, fontSize: 28 } 
         });
         txt.anchor.set(0.5);
 
@@ -63,13 +63,13 @@ export class MobileControls extends Container {
 
     private createActionButton(key: string, x: number, y: number, label: string, color: number) {
         const btn = new Graphics();
-        btn.circle(0, 0, 60);
+        btn.circle(0, 0, 42);
         btn.fill({ color: color, alpha: 0.3 });
         btn.stroke({ color: color, width: 3 });
         
         const txt = new Text({ 
             text: label, 
-            style: { fill: 0xFFFFFF, fontSize: 20, fontWeight: 'bold' } 
+            style: { fill: 0xFFFFFF, fontSize: 22, fontWeight: 'bold' } 
         });
         txt.anchor.set(0.5);
 
