@@ -164,7 +164,7 @@ export class Enemy extends Entity {
         }
 
         if (this.currentAnimation) {
-            this.currentAnimation.scale.x = this.facingRight ? 1 : -1;
+            this.currentAnimation.scale.set(this.facingRight ? 0.7 : -0.7, 0.7);
         }
         
         this.velocity.y += this.gravity * delta;

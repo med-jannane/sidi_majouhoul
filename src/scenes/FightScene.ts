@@ -212,7 +212,9 @@ export class FightScene extends BaseScene {
         ground.fill({ color: 0x000000, alpha: 0 });
         this.worldContainer.addChild(ground);
 
+        const hasSword = this.player?.hasSword ?? false;
         this.player = new Player();
+        this.player.hasSword = hasSword;
         this.player.x = 200;
         this.player.y = groundY;
         this.player.groundY = groundY;
@@ -462,6 +464,7 @@ export class FightScene extends BaseScene {
 
     private revealChamharouch() {
         this.gambriChallenge.finish();
+        this.isPaused = false;
         const boss = new Chamharouch(this.player);
         boss.x = 1200;
         boss.y = 670;
